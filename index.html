@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Pssst… a little surprise for you ♡</title>
+  
+  <!-- Primary Meta Tags -->
+  <meta name="title" content="Pssst… a little surprise for you ♡" />
+  <meta name="description" content="Open your gift, you menace. A secret birthday surprise just for you." />
+  <meta name="theme-color" content="#211326" />
+  
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Pssst… a little surprise for you ♡" />
+  <meta property="og:description" content="Open your gift, you menace. A secret birthday surprise just for you." />
+  
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image" />
+  <meta property="twitter:title" content="Pssst… a little surprise for you ♡" />
+  <meta property="twitter:description" content="Open your gift, you menace. A secret birthday surprise just for you." />
+
+  <!-- Favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎁</text></svg>" />
+
+  <!-- Google Fonts Preconnect -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Kalam:wght@400;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="./styles/main.css" />
+  <link rel="stylesheet" href="./styles/scenes.css" />
+</head>
+<body class="theme-midnight">
+  <!-- Subtle SVG Paper Grain Filter -->
+  <svg class="svg-filters" aria-hidden="true" style="position: absolute; width: 0; height: 0;">
+    <filter id="paper-grain">
+      <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="4" result="noise" />
+      <feDiffuseLighting in="noise" lighting-color="#fff" surfaceScale="1.2" result="light">
+        <feDistantLight azimuth="60" elevation="50" />
+      </feDiffuseLighting>
+      <feBlend mode="multiply" in="SourceGraphic" in2="light" />
+    </filter>
+  </svg>
+
+  <!-- Interactive Canvas Background for Stars, Dust & Confetti -->
+  <canvas id="ambient-canvas" aria-hidden="true"></canvas>
+  <canvas id="confetti-canvas" aria-hidden="true"></canvas>
+
+  <!-- Custom Cursor Trail (Desktop only) -->
+  <div id="custom-cursor" aria-hidden="true">
+    <div class="cursor-dot"></div>
+    <div class="cursor-glow"></div>
+  </div>
+
+  <!-- Persistent Floating Controls Bar -->
+  <header class="top-nav" role="banner">
+      <span class="nav-tag">CONFIDENTIAL 🔒</span>
+      <span id="countdown-pill" class="countdown-pill" title="Time remaining until this surprise self-destructs">⏳ 24:00:00</span>
+      <div class="progress-bar-container" title="Surprise Progress">
+        <div id="experience-progress" class="progress-bar"></div>
+      </div>
+    </div>
+
+    <div class="nav-actions">
+      <!-- Sound Toggle -->
+      <button id="sound-toggle" class="icon-btn" aria-label="Toggle sound" title="Toggle audio experience">
+        <span class="sound-icon sound-muted">🔇</span>
+        <span class="sound-wave" aria-hidden="true">
+          <span></span><span></span><span></span>
+        </span>
+        <span class="sound-label">Sound: Off</span>
+      </button>
+
+      <!-- Tiny Easter Egg Sneak Trigger -->
+      <button id="easter-egg-btn" class="easter-egg-badge" aria-label="A tiny secret easter egg" title="Don't click this... or do? 🤫">
+        <span class="easter-sparkle">✨</span>
+        <span class="easter-text">secret?</span>
+      </button>
+    </div>
+  </header>
+
+  <main id="app-container">
+    <!-- ==============================================
+         SCENE ONE: THE SECRET ARRIVAL
+         ============================================== -->
+    <section id="scene-intro" class="scene scene-active" aria-label="Secret Arrival">
+      <div class="intro-backdrop-glow"></div>
+      
+      <div class="intro-content">
+        <div class="top-secret-stamp animate-bounce-subtle">
+          <span class="star-icon">★</span> TOP SECRET <span class="star-icon">★</span>
+        </div>
+
+        <h1 class="whisper-title">
+          <span class="whisper-line line-1">PSSST…</span>
+          <span class="whisper-line line-2">This is for you.</span>
+        </h1>
+
+        <div class="whisper-staggered-box" aria-live="polite">
+          <p class="whisper-text line-3">Hey bitch, it's your day.</p>
+          <p class="whisper-text line-4">Your favorite maniac made you a tiny surprise.</p>
+          <p class="whisper-text line-5">Ready?<span class="blinking-cursor">|</span></p>
+        </div>
+
+        <p class="audio-hint-note">
+          <span class="hint-icon">🎧</span> Psst… turn your sound on if you want the full experience.
+        </p>
+
+        <!-- ==============================================
+             SCENE TWO: THE INTERACTIVE GIFT
+             ============================================== -->
+        <div id="gift-wrapper" class="gift-wrapper">
+          <div class="gift-glow-effect" aria-hidden="true"></div>
+
+          <!-- 3D CSS Gift Illustration -->
+          <button id="gift-box-btn" class="gift-box-3d" aria-label="Open your birthday gift box">
+            <!-- Sparkles around the box -->
+            <div class="gift-sparkles" aria-hidden="true">
+              <span class="sparkle s1">✦</span>
+              <span class="sparkle s2">✧</span>
+              <span class="sparkle s3">✦</span>
+              <span class="sparkle s4">✧</span>
+              <span class="sparkle s5">♥</span>
+            </div>
+
+            <!-- Gift Lid -->
+            <div class="gift-lid">
+              <div class="lid-ribbon-horizontal"></div>
+              <div class="lid-ribbon-vertical"></div>
+              <!-- 3D Bow on top -->
+              <div class="gift-bow">
+                <div class="bow-loop bow-left"></div>
+                <div class="bow-loop bow-right"></div>
+                <div class="bow-center"></div>
+                <div class="bow-ribbon ribbon-tail-left"></div>
+                <div class="bow-ribbon ribbon-tail-right"></div>
+              </div>
+            </div>
+
+            <!-- Gift Base Container -->
+            <div class="gift-base">
+              <div class="box-face face-front">
+                <div class="box-ribbon-v"></div>
+                <div class="box-ribbon-h"></div>
+              </div>
+              <div class="box-face face-back"></div>
+              <div class="box-face face-left">
+                <div class="box-ribbon-h"></div>
+              </div>
+              <div class="box-face face-right">
+                <div class="box-ribbon-h"></div>
+              </div>
+              <div class="box-face face-top"></div>
+              <!-- Hidden surprise burst container inside -->
+              <div class="gift-interior-glow"></div>
+            </div>
+
+            <div class="gift-shadow" aria-hidden="true"></div>
+          </button>
+
+          <div class="gift-captions">
+            <h2 class="gift-label">OPEN YOUR GIFT, YOU MENACE</h2>
+            <p class="gift-subcaption">Warning: contains an unreasonable amount of love.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Transition Flash Overlay for Gift Opening -->
+    <div id="opening-flash" class="flash-overlay" aria-hidden="true"></div>
+
+    <!-- ==============================================
+         SCENE THREE: THE BIRTHDAY REVEAL
+         ============================================== -->
+    <section id="scene-reveal" class="scene scene-hidden" aria-label="Birthday Reveal">
+      <div class="reveal-inner">
+        <!-- Floating Doodles & Stickers -->
+        <div class="scrapbook-sticker sticker-1" aria-hidden="true">🎂 IT'S HER DAY!</div>
+        <div class="scrapbook-sticker sticker-2" aria-hidden="true">✨ Certified Icon</div>
+        <div class="scrapbook-doodle doodle-crown" aria-hidden="true">👑</div>
+
+        <div class="reveal-badge">★ OFFICIAL DECLARATION ★</div>
+
+        <h1 class="reveal-headline">
+          OKAY, LISTEN UP, BITCH. <span class="inline-heart">♡</span>
+        </h1>
+
+        <p class="reveal-statement">Today is legally all about you.</p>
+        
+        <p class="reveal-subtext">And unfortunately for you, I'm about to get sentimental.</p>
+
+        <div class="reveal-action-wrapper">
+          <button id="scroll-to-letter-btn" class="btn-primary-luxury">
+            <span>READ YOUR VERY IMPORTANT MESSAGE</span>
+            <span class="btn-arrow">↓</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==============================================
+         SCENE FOUR: THE HEARTFELT BIRTHDAY LETTER
+         ============================================== -->
+    <section id="scene-letter" class="scene scene-hidden" aria-label="Birthday Letter">
+      <div class="letter-container">
+        <!-- Paper Letter Sheet -->
+        <article class="letter-sheet" id="letter-sheet">
+          <div class="tape-strip" aria-hidden="true"></div>
+          <div class="stamp-heart" aria-hidden="true">💌</div>
+
+          <!-- Decorative Floating Annotations around Letter -->
+          <aside class="letter-annotation annotation-1" aria-hidden="true">
+            “Certified chaos partners.” ✍️
+          </aside>
+          <aside class="letter-annotation annotation-2" aria-hidden="true">
+            “Annoying you forever is my legal obligation.” 💅
+          </aside>
+          <aside class="letter-annotation annotation-3" aria-hidden="true">
+            “Friendship level: concerning.” ⚠️
+          </aside>
+          <aside class="letter-annotation annotation-4" aria-hidden="true">
+            “You are stuck with me. Sorry, not sorry.” ✨
+          </aside>
+
+          <header class="letter-header">
+            <span class="letter-kicker">EXCLUSIVELY WRITTEN FOR</span>
+            <h2 class="letter-recipient">TO MY FAVORITE HUMAN</h2>
+            <div class="letter-divider">
+              <span class="line"></span>
+              <span class="heart-symbol">♥</span>
+              <span class="line"></span>
+            </div>
+          </header>
+
+          <div class="letter-body">
+            <p class="letter-para para-1">
+              To my favorite bitch, my friend, best friend, my place, and my partner in every bit of chaos, life would be boring as hell without you.
+            </p>
+
+            <p class="letter-para para-2">
+              I hope this year brings you ridiculous happiness, a beautiful surprise, and all the love you dreamed of and little heart can handle.
+            </p>
+
+            <p class="letter-para para-3">
+              No matter how much we annoy each other, you'll always be my person.
+            </p>
+
+            <p class="letter-para para-4">
+              Love you more than you'll ever admit.
+            </p>
+          </div>
+
+          <footer class="letter-footer">
+            <div class="handwritten-signature">
+              <span class="sig-line">Your bitch for life</span>
+              <span class="sig-heart">♡</span>
+            </div>
+          </footer>
+        </article>
+
+        <!-- Down indicator to next section -->
+        <div class="scroll-prompt">
+          <span class="scroll-text">Wait, there's more chaos ahead</span>
+          <span class="bounce-arrow">↓</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==============================================
+         SCENE FIVE: THE INTERACTIVE CHAOS ZONE
+         ============================================== -->
+    <section id="scene-chaos" class="scene scene-hidden" aria-label="Interactive Chaos Zone">
+      <div class="chaos-intro">
+        <span class="chaos-badge">WARNING: DANGEROUS LEVELS OF AFFECTION</span>
+        <h2 class="chaos-title">THOUGHT YOU WERE DONE? LMAOOOO.</h2>
+        <p class="chaos-subtitle">Your birthday comes with additional emotional damage.</p>
+      </div>
+
+      <div class="chaos-grid">
+        <!-- Card 1: Envelope -->
+        <div class="chaos-card card-envelope" id="card-envelope" tabindex="0" role="button" aria-expanded="false" aria-label="Card 1: A very important reminder envelope">
+          <div class="card-glass-header">
+            <span class="card-tag">EXHIBIT A</span>
+            <span class="card-status-dot"></span>
+          </div>
+          <h3 class="card-title">A VERY IMPORTANT REMINDER</h3>
+          
+          <div class="envelope-interactive">
+            <div class="envelope-wrapper">
+              <div class="envelope-back"></div>
+              <div class="envelope-letter-paper" id="envelope-paper">
+                <p class="envelope-note-content">
+                  “Reminder: you are ridiculously loved, aggressively appreciated, and permanently stuck with me. No refunds. No exchanges.”
+                </p>
+              </div>
+              <div class="envelope-front"></div>
+              <div class="envelope-flap" id="envelope-flap">
+                <div class="wax-seal">♥</div>
+              </div>
+            </div>
+          </div>
+          <p class="card-tap-prompt">Tap envelope to break seal</p>
+        </div>
+
+        <!-- Card 2: Award Trophy -->
+        <div class="chaos-card card-trophy" id="card-trophy" tabindex="0" role="button" aria-expanded="false" aria-label="Card 2: Your official birthday award">
+          <div class="card-glass-header">
+            <span class="card-tag">EXHIBIT B</span>
+            <span class="trophy-sparkle-counter">★ 1st Place</span>
+          </div>
+          <h3 class="card-title">YOUR OFFICIAL BIRTHDAY AWARD</h3>
+          
+          <div class="trophy-visual">
+            <div class="trophy-cup">
+              <span class="trophy-glow"></span>
+              🏆
+            </div>
+            <div class="trophy-sparkles-burst" aria-hidden="true">
+              <span>✨</span><span>⭐</span><span>✨</span>
+            </div>
+          </div>
+
+          <div class="certificate-preview" id="certificate-preview">
+            <div class="cert-border">
+              <h4 class="cert-title">OFFICIALLY AWARDED TO: MY FAVORITE MENACE</h4>
+              <p class="cert-body">
+                For outstanding achievements in being iconic, causing chaos, making life better, and tolerating my nonsense.
+              </p>
+            </div>
+          </div>
+
+          <button id="accept-award-btn" class="btn-award">
+            <span>ACCEPT YOUR AWARD</span> 🏅
+          </button>
+        </div>
+
+        <!-- Card 3: Unlock a Secret Chest -->
+        <div class="chaos-card card-secret" id="card-secret" tabindex="0" role="button" aria-expanded="false" aria-label="Card 3: Unlock a secret chest">
+          <div class="card-glass-header">
+            <span class="card-tag">TOP CLASSIFIED</span>
+            <span class="lock-state-badge" id="lock-state-badge">LOCKED 🔒</span>
+          </div>
+          <h3 class="card-title">UNLOCK A SECRET</h3>
+
+          <div class="chest-visual" id="chest-visual">
+            <div class="chest-lid" id="chest-lid">
+              <div class="lid-band"></div>
+              <div class="chest-keyhole">🔑</div>
+            </div>
+            <div class="chest-box">
+              <div class="chest-lock-orb" id="chest-lock-orb"></div>
+            </div>
+            <div class="chest-light-ray" id="chest-light-ray"></div>
+          </div>
+
+          <div class="secret-revealed-panel" id="secret-revealed-panel">
+            <span class="soft-quote-icon">“</span>
+            <p class="secret-text">
+              <strong>SECRET REVEALED:</strong> No matter how much life changes, how far apart we are, or how chaotic everything gets, you'll always have me in your corner. Always.
+            </p>
+          </div>
+
+          <p class="card-tap-prompt" id="chest-prompt">Tap chest to unlock the vault</p>
+        </div>
+
+        <!-- Card 4: Tap If You Love Me -->
+        <div class="chaos-card card-love-meter" id="card-love-meter" tabindex="0" role="button" aria-label="Card 4: Tap if you love me heart interaction">
+          <div class="card-glass-header">
+            <span class="card-tag">CONTRACTUAL OBLIGATION</span>
+            <span class="love-counter-badge" id="love-counter-badge">Taps: 0</span>
+          </div>
+          <h3 class="card-title">TAP IF YOU LOVE ME</h3>
+
+          <div class="interactive-heart-stage">
+            <button id="tap-heart-btn" class="pulsing-love-heart" aria-label="Tap the glowing heart to declare love">
+              <span class="heart-core">💖</span>
+              <span class="heart-ripple-1"></span>
+              <span class="heart-ripple-2"></span>
+            </button>
+          </div>
+
+          <div class="love-message-box">
+            <p id="love-dynamic-text" class="love-dynamic-text">
+              Go ahead, tap it. I dare you.
+            </p>
+          </div>
+
+          <p class="card-tap-prompt">Spam the heart for truth</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==============================================
+         SCENE SIX: THE BIRTHDAY WISH GENERATOR
+         ============================================== -->
+    <section id="scene-wishes" class="scene scene-hidden" aria-label="Birthday Wish Generator">
+      <div class="wishes-header">
+        <span class="wishes-tag">CHOOSE YOUR DESTINY</span>
+        <h2 class="wishes-title">PICK YOUR BIRTHDAY BLESSING.</h2>
+        <p class="wishes-subtitle">Choose one (or tap all three, because you're greedy like that):</p>
+      </div>
+
+      <div class="wishes-grid">
+        <!-- Wish Card 1 -->
+        <div class="wish-card" id="wish-card-1" tabindex="0" role="button" aria-expanded="false" data-wish="main-character">
+          <div class="wish-card-inner">
+            <div class="wish-card-front">
+              <div class="wish-icon">👑</div>
+              <h3 class="wish-card-name">MAIN CHARACTER ENERGY</h3>
+              <p class="wish-card-hint">For the undisputed star of every room</p>
+              <span class="wish-reveal-pill">TAP TO UNVEIL ✨</span>
+            </div>
+            <div class="wish-card-back">
+              <div class="wish-card-back-header">
+                <span class="sparkle-gem">✦</span>
+                <h4>MAIN CHARACTER ENERGY</h4>
+                <span class="sparkle-gem">✦</span>
+              </div>
+              <blockquote class="wish-quote">
+                “May every room know you arrived, every dream get a little closer, and every mirror remind you who the hell you are.”
+              </blockquote>
+              <span class="wish-blessing-seal">APPROVED BY THE UNIVERSE 💫</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Wish Card 2 -->
+        <div class="wish-card" id="wish-card-2" tabindex="0" role="button" aria-expanded="false" data-wish="unreasonable-happiness">
+          <div class="wish-card-inner">
+            <div class="wish-card-front">
+              <div class="wish-icon">🌻</div>
+              <h3 class="wish-card-name">UNREASONABLE HAPPINESS</h3>
+              <p class="wish-card-hint">For pure, absurd, overflowing joy</p>
+              <span class="wish-reveal-pill">TAP TO UNVEIL ✨</span>
+            </div>
+            <div class="wish-card-back">
+              <div class="wish-card-back-header">
+                <span class="sparkle-gem">✦</span>
+                <h4>UNREASONABLE HAPPINESS</h4>
+                <span class="sparkle-gem">✦</span>
+              </div>
+              <blockquote class="wish-quote">
+                “May your happiest days arrive unexpectedly, your worries get quieter, and your heart receive more love than it knows what to do with.”
+              </blockquote>
+              <span class="wish-blessing-seal">SENDING INFINITE LOVE 🌸</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Wish Card 3 -->
+        <div class="wish-card" id="wish-card-3" tabindex="0" role="button" aria-expanded="false" data-wish="unlimited-chaos">
+          <div class="wish-card-inner">
+            <div class="wish-card-front">
+              <div class="wish-icon">🔥</div>
+              <h3 class="wish-card-name">UNLIMITED CHAOS</h3>
+              <p class="wish-card-hint">For memories we probably shouldn't repeat</p>
+              <span class="wish-reveal-pill">TAP TO UNVEIL ✨</span>
+            </div>
+            <div class="wish-card-back">
+              <div class="wish-card-back-header">
+                <span class="sparkle-gem">✦</span>
+                <h4>UNLIMITED CHAOS</h4>
+                <span class="sparkle-gem">✦</span>
+              </div>
+              <blockquote class="wish-quote">
+                “May we make questionable decisions, collect ridiculous memories, laugh until we cannot breathe, and remain absolute menaces together.”
+              </blockquote>
+              <span class="wish-blessing-seal">CHAOS PARTNERS FOREVER ⚡</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==============================================
+         SCENE EIGHT: THE GRAND FINALE
+         ============================================== -->
+    <section id="scene-finale" class="scene scene-hidden" aria-label="Grand Finale">
+      <div class="finale-starfield-glow" aria-hidden="true"></div>
+
+      <div class="finale-container">
+        <div class="finale-crown-tag">THE FINAL CHAPTER ★</div>
+
+        <h2 class="finale-title">
+          HAPPY BIRTHDAY, YOU BEAUTIFUL DISASTER. <span class="inline-heart">♡</span>
+        </h2>
+
+        <p class="finale-prose prose-1">
+          Here's to another year of being iconic, unhinged, and absolutely impossible to replace.
+        </p>
+
+        <p class="finale-prose prose-2">
+          Love you. Always. Even when you're annoying.
+        </p>
+
+        <div class="finale-signature-box">
+          <span class="finale-sig">Your favorite maniac, forever.</span>
+        </div>
+
+        <!-- Wish Orb Interactive Section -->
+        <div class="wish-orb-wrapper" id="wish-orb-wrapper">
+          <button id="trigger-wish-btn" class="btn-wish-orb-launch">
+            <span class="star-burst">✨</span>
+            <span>MAKE ONE LAST WISH</span>
+            <span class="star-burst">✨</span>
+          </button>
+
+          <!-- Interactive Wish Orb Modal / Container -->
+          <div id="wish-orb-stage" class="wish-orb-stage hidden">
+            <div class="wish-orb-sphere" id="wish-orb-sphere">
+              <div class="orb-ring ring-1"></div>
+              <div class="orb-ring ring-2"></div>
+              <div class="orb-core"></div>
+            </div>
+
+            <p class="wish-instruction">
+              Close your eyes, take a breath, and make a silent birthday wish in your heart.
+            </p>
+
+            <button id="confirm-wish-btn" class="btn-confirm-wish">
+              I MADE MY WISH 🌟
+            </button>
+          </div>
+
+          <!-- Granted celebration reveal -->
+          <div id="wish-granted-banner" class="wish-granted-banner hidden">
+            <div class="granted-sparkle-crown">💫 ✦ 💫</div>
+            <h3 class="granted-headline">
+              WISH GRANTED… OR AT LEAST I HOPE THE UNIVERSE IS LISTENING. ♡
+            </h3>
+          </div>
+        </div>
+
+        <!-- Smooth Replay Button -->
+        <div class="replay-section">
+          <button id="replay-btn" class="btn-replay" aria-label="Replay the birthday surprise">
+            <span class="replay-icon">↻</span>
+            <span>REPLAY YOUR LITTLE SURPRISE</span>
+          </button>
+          <p class="replay-subtext">You can experience it all over again anytime.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ==============================================
+       SCENE SEVEN: THE HIDDEN EASTER EGG MODAL
+       ============================================== -->
+  <div id="easter-egg-modal" class="easter-egg-modal hidden" role="dialog" aria-modal="true" aria-labelledby="easter-egg-title">
+    <div class="easter-modal-backdrop" id="easter-modal-backdrop"></div>
+    <div class="easter-modal-card">
+      <div class="easter-star-decor" aria-hidden="true">
+        <span>★</span><span>✦</span><span>★</span>
+      </div>
+
+      <span class="easter-top-kicker">YOU FOUND THE SECRET CORNER 🤫</span>
+      
+      <div class="easter-message-body">
+        <p class="easter-p1">
+          Psst… between all the jokes and all the chaos, I hope you never forget how special you are to me.
+        </p>
+        <p class="easter-p2">
+          You make ordinary days feel like memories worth keeping.
+        </p>
+        <p class="easter-p3">
+          And if I had to do this whole friendship thing again, I'd still pick you. Every single time. <span class="easter-heart">♡</span>
+        </p>
+      </div>
+
+      <button id="close-easter-egg-btn" class="btn-close-easter">
+        <span>OKAY, NOW STOP MAKING ME EMOTIONAL.</span> 🥹
+      </button>
+    </div>
+  </div>
+
+  <!-- ==============================================
+       24-HOUR SELF-DESTRUCT / EXPIRED OVERLAY
+       ============================================== -->
+  <div id="expired-screen" class="expired-screen hidden" role="alertdialog" aria-modal="true" aria-labelledby="expired-title">
+    <div class="expired-backdrop"></div>
+    <div class="expired-card">
+      <div class="expired-hourglass">⌛</div>
+      <span class="expired-badge">24 HOURS HAVE ELAPSED • TOP SECRET DISINTEGRATED</span>
+      <h1 id="expired-title" class="expired-title">PSSST… YOU’RE A LITTLE TOO LATE.</h1>
+      <p class="expired-body">
+        This secret universe was set to self-destruct after exactly 24 hours. The magic, laughs, and chaos have dissolved back into the shadows.
+      </p>
+      <p class="expired-subbody">
+        I hope your birthday was unhinged, iconic, and filled with an unreasonable amount of love.
+      </p>
+      <div class="expired-signature">
+        <span>Your favorite maniac, forever. ♡</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- JavaScript Modules -->
+  <script type="module" src="./scripts/app.js"></script>
+</body>
+</html>
+

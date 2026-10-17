@@ -1,0 +1,393 @@
+/* ==========================================================================
+   MAIN DESIGN SYSTEM & BASE STYLES
+   "PSSST... THIS IS FOR YOU"
+   ========================================================================== */
+
+:root {
+  /* Color Palette */
+  --color-midnight: #211326;
+  --color-midnight-deep: #140b17;
+  --color-midnight-light: #321c3a;
+  --color-dusty-rose: #D98DA5;
+  --color-dusty-rose-dark: #b86e86;
+  --color-blush-pink: #F7DCE5;
+  --color-warm-cream: #FFF5EB;
+  --color-cherry-red: #FF496C;
+  --color-cherry-glow: rgba(255, 73, 108, 0.45);
+  --color-lavender: #BCA7F5;
+  --color-lavender-light: #E7DEFC;
+  --color-gold: #F8D176;
+  --color-gold-glow: rgba(248, 209, 118, 0.5);
+
+  /* Glassmorphism & Shadow Tokens */
+  --glass-bg: rgba(255, 245, 235, 0.08);
+  --glass-border: rgba(255, 255, 255, 0.15);
+  --glass-blur: blur(16px);
+  --glass-dark-bg: rgba(33, 19, 38, 0.75);
+  --card-shadow: 0 16px 40px -10px rgba(15, 7, 20, 0.45), 0 0 1px rgba(255, 255, 255, 0.2);
+  --paper-shadow: 0 20px 50px -12px rgba(33, 19, 38, 0.22), 0 2px 10px rgba(0, 0, 0, 0.05);
+  --glow-pink: 0 0 30px rgba(217, 141, 165, 0.35);
+
+  /* Typography */
+  --font-serif: "Playfair Display", "Cormorant Garamond", Georgia, serif;
+  --font-serif-subtle: "Cormorant Garamond", Georgia, serif;
+  --font-sans: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-handwriting: "Caveat", "Kalam", cursive, sans-serif;
+
+  /* Spacing & Layout */
+  --container-max-w: 960px;
+  --letter-max-w: 680px;
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-full: 9999px;
+
+  /* Transitions */
+  --transition-fast: 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+  --transition-smooth: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-bounce: 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Reset & Base Rules */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+  height: 100%;
+  background-color: var(--color-midnight);
+  color: var(--color-warm-cream);
+  overflow-x: hidden;
+}
+
+body {
+  min-height: 100%;
+  min-height: 100svh;
+  font-family: var(--font-sans);
+  background-color: var(--color-midnight);
+  color: var(--color-warm-cream);
+  line-height: 1.6;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  position: relative;
+  transition: background-color 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+body.theme-reveal {
+  background: radial-gradient(circle at 50% 20%, #462551 0%, #291530 45%, #180c1c 100%);
+}
+
+body.theme-paper-light {
+  background: linear-gradient(180deg, #2b1733 0%, #3e2147 40%, #2b1633 100%);
+}
+
+/* Fullscreen Background Canvases */
+#ambient-canvas,
+#confetti-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 1;
+}
+
+#confetti-canvas {
+  z-index: 999;
+}
+
+/* Custom Cursor (Desktop Only) */
+#custom-cursor {
+  position: fixed;
+  pointer-events: none;
+  z-index: 10000;
+  transform: translate(-50%, -50%);
+  display: none;
+  mix-blend-mode: screen;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  #custom-cursor {
+    display: block;
+  }
+}
+
+.cursor-dot {
+  width: 10px;
+  height: 10px;
+  background: var(--color-cherry-red);
+  border-radius: 50%;
+  box-shadow: 0 0 12px var(--color-cherry-red), 0 0 20px var(--color-dusty-rose);
+  transition: transform 0.15s ease-out;
+}
+
+.cursor-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 32px;
+  height: 32px;
+  transform: translate(-50%, -50%);
+  border: 1px dashed rgba(247, 220, 229, 0.5);
+  border-radius: 50%;
+  animation: rotateSlow 8s linear infinite;
+}
+
+@keyframes rotateSlow {
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* ==========================================================================
+   NAVIGATION & PROGRESS CONTROLS
+   ========================================================================== */
+.top-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 500;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 18px;
+  padding-top: calc(12px + env(safe-area-inset-top, 0px));
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  background: rgba(33, 19, 38, 0.5);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.nav-pill {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255, 245, 235, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius-full);
+  padding: 5px 12px;
+}
+
+.nav-tag {
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--color-dusty-rose);
+  text-transform: uppercase;
+}
+
+.progress-bar-container {
+  width: 55px;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.progress-bar {
+  height: 100%;
+  width: 15%;
+  background: linear-gradient(90deg, var(--color-dusty-rose), var(--color-cherry-red));
+  border-radius: var(--radius-full);
+  transition: width 0.4s ease;
+}
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Sound Button */
+.icon-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 245, 235, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: var(--radius-full);
+  padding: 6px 14px;
+  min-height: 40px;
+  color: var(--color-warm-cream);
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.icon-btn:hover, .icon-btn:focus-visible {
+  background: rgba(255, 245, 235, 0.2);
+  border-color: var(--color-dusty-rose);
+  transform: translateY(-1px);
+  outline: none;
+}
+
+.sound-wave {
+  display: none;
+  align-items: flex-end;
+  gap: 2px;
+  height: 12px;
+}
+
+.sound-wave span {
+  display: block;
+  width: 2px;
+  background: var(--color-cherry-red);
+  border-radius: 1px;
+}
+
+.icon-btn.is-playing .sound-muted {
+  display: none;
+}
+
+.icon-btn.is-playing .sound-wave {
+  display: flex;
+}
+
+.icon-btn.is-playing .sound-wave span:nth-child(1) {
+  height: 60%;
+  animation: soundBar 0.6s ease-in-out infinite alternate;
+}
+.icon-btn.is-playing .sound-wave span:nth-child(2) {
+  height: 100%;
+  animation: soundBar 0.5s ease-in-out infinite alternate 0.2s;
+}
+.icon-btn.is-playing .sound-wave span:nth-child(3) {
+  height: 40%;
+  animation: soundBar 0.7s ease-in-out infinite alternate 0.1s;
+}
+
+@keyframes soundBar {
+  from { height: 25%; }
+  to { height: 100%; }
+}
+
+/* Easter Egg Sneak Trigger Button */
+.easter-egg-badge {
+  background: rgba(248, 209, 118, 0.12);
+  border: 1px solid rgba(248, 209, 118, 0.35);
+  border-radius: var(--radius-full);
+  padding: 6px 12px;
+  min-height: 40px;
+  color: var(--color-gold);
+  font-family: var(--font-handwriting);
+  font-size: 1.05rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: all var(--transition-bounce);
+  animation: subtleGlow 3s ease-in-out infinite;
+}
+
+.easter-egg-badge:hover, .easter-egg-badge:focus-visible {
+  transform: scale(1.08) rotate(-2deg);
+  background: rgba(248, 209, 118, 0.25);
+  box-shadow: 0 0 16px var(--color-gold-glow);
+  outline: none;
+}
+
+@keyframes subtleGlow {
+  0%, 100% { box-shadow: 0 0 8px rgba(248, 209, 118, 0.2); }
+  50% { box-shadow: 0 0 18px rgba(248, 209, 118, 0.45); }
+}
+
+/* ==========================================================================
+   APP CONTAINER & SCENE ARCHITECTURE
+   ========================================================================== */
+#app-container {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  min-height: 100vh;
+}
+
+.scene {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 80px 20px 60px 20px;
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.scene-hidden {
+  display: none !important;
+}
+
+/* Generic Utility Button */
+.btn-primary-luxury {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  background: linear-gradient(135deg, var(--color-cherry-red) 0%, #d42e56 100%);
+  color: var(--color-warm-cream);
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  padding: 16px 32px;
+  min-height: 52px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  box-shadow: 0 10px 25px -4px var(--color-cherry-glow);
+  transition: all var(--transition-bounce);
+  text-transform: uppercase;
+}
+
+.btn-primary-luxury:hover, .btn-primary-luxury:focus-visible {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 15px 35px -2px var(--color-cherry-glow);
+  outline: none;
+}
+
+.btn-arrow {
+  font-size: 1.2rem;
+  transition: transform var(--transition-bounce);
+}
+
+.btn-primary-luxury:hover .btn-arrow {
+  transform: translateY(4px);
+}
+
+/* Flash Overlay */
+.flash-overlay {
+  position: fixed;
+  inset: 0;
+  background: #FFF5EB;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 2000;
+  transition: opacity 0.35s ease-out;
+}
+
+.flash-overlay.active {
+  opacity: 0.95;
+}
+
+/* Accessibility: Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
